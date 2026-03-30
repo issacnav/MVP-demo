@@ -1,0 +1,16 @@
+{
+  "name": "Sarthak Navalekar – Physiotherapist",
+  "short_name": "Sarthak N",
+  "description": "Sarthak Uday Navalekar – Physiotherapy Practitioner based in Scotland, UK",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/images/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

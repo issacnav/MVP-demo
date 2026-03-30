@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 366 366" fill="none">
+  <style>
+    :root { --mark-fill: #122533; }
+    @media (prefers-color-scheme: dark) { :root { --mark-fill: #ffffff; } }
+    .p { fill: var(--mark-fill); }
+  </style>
+  <!-- Pixel grid: each cell = 22x22, origin at (18, 73), 15 cols x 10 rows -->
+  <!-- S letter (cols 0-5) -->
+  <rect class="p" x="40"  y="73"  width="22" height="22"/>
+  <rect class="p" x="62"  y="73"  width="22" height="22"/>
+  <rect class="p" x="84"  y="73"  width="22" height="22"/>
+  <rect class="p" x="106" y="73"  width="22" height="22"/>
+  <rect class="p" x="18"  y="95"  width="22" height="22"/>
+  <rect class="p" x="40"  y="95"  width="22" height="22"/>
+  <rect class="p" x="18"  y="117" width="22" height="22"/>
+  <rect class="p" x="40"  y="117" width="22" height="22"/>
+  <rect class="p" x="62"  y="139" width="22" height="22"/>
+  <rect class="p" x="84"  y="139" width="22" height="22"/>
+  <rect class="p" x="106" y="139" width="22" height="22"/>
+  <rect class="p" x="62"  y="161" width="22" height="22"/>
+  <rect class="p" x="84"  y="161" width="22" height="22"/>
+  <rect class="p" x="106" y="161" width="22" height="22"/>
+  <rect class="p" x="106" y="183" width="22" height="22"/>
+  <rect class="p" x="128" y="183" width="22" height="22"/>
+  <rect class="p" x="106" y="205" width="22" height="22"/>
+  <rect class="p" x="128" y="205" width="22" height="22"/>
+  <rect class="p" x="18"  y="227" width="22" height="22"/>
+  <rect class="p" x="40"  y="227" width="22" height="22"/>
+  <rect class="p" x="62"  y="227" width="22" height="22"/>
+  <rect class="p" x="84"  y="227" width="22" height="22"/>
+  <rect class="p" x="106" y="227" width="22" height="22"/>
+  <!-- N letter (cols 8-14) -->
+  <rect class="p" x="194" y="73"  width="22" height="22"/>
+  <rect class="p" x="194" y="95"  width="22" height="22"/>
+  <rect class="p" x="194" y="117" width="22" height="22"/>
+  <rect class="p" x="194" y="139" width="22" height="22"/>
+  <rect class="p" x="194" y="161" width="22" height="22"/>
+  <rect class="p" x="194" y="183" width="22" height="22"/>
+  <rect class="p" x="194" y="205" width="22" height="22"/>
+  <rect class="p" x="194" y="227" width="22" height="22"/>
+  <rect class="p" x="216" y="95"  width="22" height="22"/>
+  <rect class="p" x="238" y="117" width="22" height="22"/>
+  <rect class="p" x="260" y="139" width="22" height="22"/>
+  <rect class="p" x="282" y="161" width="22" height="22"/>
+  <rect class="p" x="304" y="183" width="22" height="22"/>
+  <rect class="p" x="326" y="73"  width="22" height="22"/>
+  <rect class="p" x="326" y="95"  width="22" height="22"/>
+  <rect class="p" x="326" y="117" width="22" height="22"/>
+  <rect class="p" x="326" y="139" width="22" height="22"/>
+  <rect class="p" x="326" y="161" width="22" height="22"/>
+  <rect class="p" x="326" y="183" width="22" height="22"/>
+  <rect class="p" x="326" y="205" width="22" height="22"/>
+  <rect class="p" x="326" y="227" width="22" height="22"/>
+</svg>
