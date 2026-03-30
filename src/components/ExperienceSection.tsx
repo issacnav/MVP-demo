@@ -75,7 +75,7 @@ function ExperienceItem({ entry }: { entry: ExperienceEntry }) {
         <div className="flex size-6 shrink-0 items-center justify-center select-none">
           <span className="flex size-2 rounded-full bg-zinc-300 dark:bg-zinc-600" />
         </div>
-        <h3 className="text-lg leading-snug font-medium">
+        <h3 className="text-base leading-snug font-medium sm:text-lg">
           {entry.companyUrl ? (
             <a
               className="underline-offset-4 hover:underline"
@@ -107,7 +107,7 @@ function ExperienceItem({ entry }: { entry: ExperienceEntry }) {
                 <ExpandIcon />
               </div>
             </div>
-            <div className="flex items-center gap-2 pl-9 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 pl-9 text-xs text-muted-foreground sm:text-sm">
               <dl>
                 <dt className="sr-only">Employment Type</dt>
                 <dd>{entry.type}</dd>

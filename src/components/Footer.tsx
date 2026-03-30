@@ -23,7 +23,7 @@ export function Footer() {
         <CrossMarker position="bottom-left" />
         <CrossMarker position="bottom-right" />
 
-        <div className="flex items-end justify-between px-4 pb-4">
+        <div className="flex items-end justify-between gap-2 px-3 pb-4 sm:px-4">
           <div className="mt-6 flex flex-col leading-none">
             <span className="font-mono text-[12px] text-muted-foreground">
               © 2026 Sarthak Navalekar

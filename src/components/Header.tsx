@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "@/components/ThemeProvider";
 import { SearchIcon, SunIcon, MoonIcon } from "@/components/icons";
@@ -8,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
   const { open: openCommandPalette } = useCommandPalette();
 
   const isDark =
@@ -18,12 +20,12 @@ export function Header() {
 
   return (
     <motion.header
-      className="sticky top-0 z-50 bg-background px-2 transition-shadow duration-300"
+      className="sticky top-0 z-50 bg-background px-3 sm:px-4 md:px-2 transition-shadow duration-300"
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
     >
-      <div className="screen-line-before screen-line-after mx-auto flex h-12 items-center justify-between gap-2 border-x border-edge px-2 sm:gap-4 md:max-w-3xl">
+      <div className="screen-line-before screen-line-after mx-auto flex h-12 items-center justify-between gap-1.5 border-x border-edge px-2 sm:gap-4 md:max-w-3xl">
         <Link href="/" aria-label="Home" className="transition-[scale] ease-out active:scale-[0.98]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <motion.img
@@ -84,8 +86,59 @@ export function Header() {
               </motion.span>
             </AnimatePresence>
           </button>
+
+          {/* Mobile hamburger */}
+          <button
+            className="inline-flex items-center justify-center rounded-lg hover:bg-accent hover:text-accent-foreground size-8 shrink-0 sm:hidden"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {menuOpen ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="4" y1="8" x2="20" y2="8" />
+                  <line x1="4" y1="16" x2="20" y2="16" />
+                </>
+              )}
+            </svg>
+          </button>
         </div>
       </div>
+
+      {/* Mobile dropdown menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            className="border-x border-b border-edge bg-background px-4 py-3 sm:hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="flex flex-col gap-2">
+              <Link
+                href="/"
+                className="font-mono text-sm font-medium text-foreground py-1"
+                onClick={() => setMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                href="/projects"
+                className="font-mono text-sm font-medium text-muted-foreground py-1"
+                onClick={() => setMenuOpen(false)}
+              >
+                Projects
+              </Link>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }

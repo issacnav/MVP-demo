@@ -147,25 +147,27 @@ export function HeroSection() {
         </ScaleIn>
 
         {/* Info */}
-        <div className="flex flex-1 flex-col justify-center gap-1 pl-2 sm:pl-4">
+        <div className="flex flex-1 flex-col justify-center gap-1 overflow-hidden pl-2 sm:pl-4">
           <SlideIn direction="right" delay={0.3}>
-            <div className="flex items-center gap-2 pt-2 pb-2">
-              <h1 className="font-pixel text-xl leading-none font-black sm:text-3xl">
+            <div className="flex flex-wrap items-center gap-1.5 pt-2 pb-2 sm:gap-2">
+              <h1 className="font-pixel text-lg leading-none font-black sm:text-3xl">
                 Sarthak Navalekar
               </h1>
-              <PronounceName />
-              <motion.span
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.6, type: "spring", stiffness: 400 }}
-              >
-                <VerifiedIcon className="size-4.5 text-info select-none" />
-              </motion.span>
+              <div className="flex items-center gap-1.5">
+                <PronounceName />
+                <motion.span
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6, type: "spring", stiffness: 400 }}
+                >
+                  <VerifiedIcon className="size-4.5 text-info select-none" />
+                </motion.span>
+              </div>
             </div>
           </SlideIn>
 
           <FadeIn delay={0.5}>
-            <p className="flex items-baseline gap-1.5 font-mono text-sm leading-snug text-muted-foreground">
+            <p className="flex flex-wrap items-baseline gap-1.5 font-mono text-xs leading-snug text-muted-foreground sm:text-sm">
               <TextFlip />
               <span>•</span>
               <span>Scotland, UK</span>
@@ -173,7 +175,7 @@ export function HeroSection() {
           </FadeIn>
 
           <FadeIn delay={0.6}>
-            <div className="flex min-h-4 items-center gap-3 font-mono text-xs text-muted-foreground">
+            <div className="flex flex-wrap min-h-4 items-center gap-2 font-mono text-xs text-muted-foreground sm:gap-3">
               <span className="flex items-center gap-1.5">
                 <span className="status-pulse h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
                 <span>Open to opportunities</span>

@@ -49,7 +49,7 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
         <div className="flex size-6 shrink-0 items-center justify-center select-none">
           <span className="flex size-2 rounded-full bg-zinc-300 dark:bg-zinc-600" />
         </div>
-        <h3 className="flex-1 text-lg leading-snug font-medium">
+        <h3 className="flex-1 text-base leading-snug font-medium sm:text-lg">
           {entry.schoolUrl ? (
             <a
               className="underline-offset-4 hover:underline"
@@ -76,7 +76,7 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
               <div className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background">
                 <GraduationCapIcon className="size-4" />
               </div>
-              <h4 className="flex-1 font-medium text-balance">
+              <h4 className="flex-1 text-sm font-medium text-balance sm:text-base">
                 {entry.degree}
                 <span className="font-normal text-muted-foreground">
                   {" "}· {entry.field}

@@ -19,7 +19,7 @@ export default function Home() {
       {/* Scroll fade overlay */}
       <div className="pointer-events-none fixed inset-x-0 top-0 z-40 h-16 bg-gradient-to-b from-background to-transparent" />
       <Header />
-      <main className="px-2">
+      <main className="px-3 sm:px-4 md:px-2">
         <div className="mx-auto md:max-w-3xl">
           <HeroSection />
 

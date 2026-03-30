@@ -56,7 +56,7 @@ export function CertificationsSection() {
         <FadeIn delay={0.2}>
           <div>
             <h3 className="font-mono text-sm font-medium text-foreground mb-2">Skills</h3>
-            <StaggerContainer className="grid grid-cols-3 divide-x divide-y divide-border rounded-lg border overflow-hidden">
+            <StaggerContainer className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-border rounded-lg border overflow-hidden">
               {skills.map((skill) => (
                 <StaggerItem key={skill.label}>
                   <motion.div
