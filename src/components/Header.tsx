@@ -51,7 +51,6 @@ export function Header() {
     >
       <div className="screen-line-before screen-line-after mx-auto flex h-12 items-center justify-between gap-1.5 border-x border-edge px-2 sm:gap-4 md:max-w-3xl">
         <Link href="/" aria-label="Home" className="transition-[scale] ease-out active:scale-[0.98]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <motion.img
             src="/images/icon.svg"
             alt="Sarthak Navalekar"
@@ -75,6 +74,24 @@ export function Header() {
             className="font-mono text-sm font-medium text-muted-foreground transition-[color] duration-300 hover:text-foreground"
           >
             Projects
+          </Link>
+          <Link
+            href="/services"
+            className="font-mono text-sm font-medium text-muted-foreground transition-[color] duration-300 hover:text-foreground"
+          >
+            Services
+          </Link>
+          <Link
+            href="/blog"
+            className="font-mono text-sm font-medium text-muted-foreground transition-[color] duration-300 hover:text-foreground"
+          >
+            Blog
+          </Link>
+          <Link
+            href="/book"
+            className="inline-flex items-center rounded-full border border-info/30 px-3 py-1 font-mono text-sm font-medium text-info transition-colors duration-300 hover:border-info/40 hover:bg-info/10 hover:text-foreground"
+          >
+            Book a Session
           </Link>
         </nav>
 
@@ -214,6 +231,27 @@ export function Header() {
                 onClick={() => setMenuOpen(false)}
               >
                 Projects
+              </Link>
+              <Link
+                href="/services"
+                className="font-mono text-sm font-medium text-muted-foreground py-1"
+                onClick={() => setMenuOpen(false)}
+              >
+                Services
+              </Link>
+              <Link
+                href="/blog"
+                className="font-mono text-sm font-medium text-muted-foreground py-1"
+                onClick={() => setMenuOpen(false)}
+              >
+                Blog
+              </Link>
+              <Link
+                href="/book"
+                className="inline-flex w-fit items-center rounded-full border border-info/30 px-3 py-1 font-mono text-sm font-medium text-info transition-colors hover:border-info/40 hover:bg-info/10 hover:text-foreground"
+                onClick={() => setMenuOpen(false)}
+              >
+                Book a Session
               </Link>
             </div>
           </motion.nav>
