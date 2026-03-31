@@ -17,41 +17,41 @@ import {
 import { type ComponentType } from "react";
 
 const certifications = [
+  "Master's in Advanced Physiotherapy Practice",
   "Manual Therapy Certification",
-  "VTCT Skills (ITEC) Level 3 Extended Diploma in Sport Massage",
-  "Certified Acupuncture & Dry Needling Therapist",
-  "Level 3 Health and Social Care with Adult Nursing",
+  "Sports Massage Level 3",
+  "Dry Needling CPD",
 ];
 
 const hoverColors = [
-  "oklch(0.93 0.05 0)",      // soft rose
-  "oklch(0.93 0.04 250)",    // soft blue
-  "oklch(0.92 0.05 150)",    // soft green
-  "oklch(0.93 0.05 30)",     // soft orange
-  "oklch(0.92 0.04 280)",    // soft purple
-  "oklch(0.93 0.04 190)",    // soft teal
-  "oklch(0.93 0.04 80)",     // soft yellow
-  "oklch(0.92 0.04 220)",    // soft sky
-  "oklch(0.92 0.05 330)",    // soft pink
+  "oklch(0.93 0.05 0)",
+  "oklch(0.93 0.04 250)",
+  "oklch(0.92 0.05 150)",
+  "oklch(0.93 0.05 30)",
+  "oklch(0.92 0.04 280)",
+  "oklch(0.93 0.04 190)",
+  "oklch(0.93 0.04 80)",
+  "oklch(0.92 0.04 220)",
+  "oklch(0.92 0.05 330)",
 ];
 
 const hoverColorsDark = [
-  "oklch(0.30 0.05 0)",      // dark rose
-  "oklch(0.30 0.04 250)",    // dark blue
-  "oklch(0.28 0.05 150)",    // dark green
-  "oklch(0.30 0.05 30)",     // dark orange
-  "oklch(0.28 0.04 280)",    // dark purple
-  "oklch(0.30 0.04 190)",    // dark teal
-  "oklch(0.30 0.04 80)",     // dark yellow
-  "oklch(0.28 0.04 220)",    // dark sky
-  "oklch(0.28 0.05 330)",    // dark pink
+  "oklch(0.30 0.05 0)",
+  "oklch(0.30 0.04 250)",
+  "oklch(0.28 0.05 150)",
+  "oklch(0.30 0.05 30)",
+  "oklch(0.28 0.04 280)",
+  "oklch(0.30 0.04 190)",
+  "oklch(0.30 0.04 80)",
+  "oklch(0.28 0.04 220)",
+  "oklch(0.28 0.05 330)",
 ];
 
 const skills: { label: string; icon: ComponentType<{ className?: string }> }[] = [
   { label: "Patient Care", icon: Heart },
   { label: "Communication", icon: MessageCircle },
-  { label: "Neuro Rehab", icon: Brain },
-  { label: "Ortho Rehab", icon: Bone },
+  { label: "Clinical Reasoning", icon: Brain },
+  { label: "MSK Rehab", icon: Bone },
   { label: "Mobility Support", icon: Accessibility },
   { label: "Infection Control", icon: ShieldCheck },
   { label: "Documentation", icon: ClipboardList },
@@ -60,10 +60,10 @@ const skills: { label: string; icon: ComponentType<{ className?: string }> }[] =
 ];
 
 const interests = [
-  "Creative writing",
-  "Volunteering",
-  "Chess",
-  "Web development",
+  "Community wellbeing",
+  "Strength training",
+  "Rehab education",
+  "Evidence-based care",
 ];
 
 const interestHoverColors = [

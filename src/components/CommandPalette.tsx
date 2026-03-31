@@ -27,9 +27,9 @@ const sections: { label: string; id: string; icon: ComponentType<{ className?: s
 ];
 
 const actions: { label: string; icon: ComponentType<{ className?: string }>; action: () => void }[] = [
-  { label: "Download Resume", icon: FileText, action: () => window.open("https://drive.google.com/file/d/1AZStOPzqgW-0yYSbCrELkORRKVAUbCaG/view", "_blank") },
-  { label: "Send Email", icon: Mail, action: () => window.open("mailto:snaval300@caledonian.ac.uk") },
-  { label: "Open LinkedIn", icon: LinkedInIcon, action: () => window.open("https://www.linkedin.com/in/sarthak-navalekar/", "_blank") },
+  { label: "Open CV", icon: FileText, action: () => window.open("https://example.com/physio-cv.pdf", "_blank") },
+  { label: "Send Email", icon: Mail, action: () => window.open("mailto:clinic@example.com") },
+  { label: "Open LinkedIn", icon: LinkedInIcon, action: () => window.open("https://www.linkedin.com/in/your-name/", "_blank") },
 ];
 
 export function CommandPalette() {

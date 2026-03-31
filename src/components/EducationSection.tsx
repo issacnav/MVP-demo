@@ -17,26 +17,26 @@ interface EducationEntry {
 
 const educations: EducationEntry[] = [
   {
-    school: "Glasgow Caledonian University",
-    schoolUrl: "https://www.gcu.ac.uk/",
+    school: "Example Health University",
+    schoolUrl: "https://example.com/health-university",
     degree: "Master of Science",
     field: "Advanced Physiotherapy Practice",
-    period: "2024—2025",
+    period: "2023–2024",
     details: [
-      "Advanced clinical reasoning and evidence-based practice in musculoskeletal and neurological physiotherapy.",
-      "Research methods, critical appraisal, and healthcare leadership modules.",
-      "Clinical placements across NHS Scotland settings.",
+      "Focused on advanced musculoskeletal assessment, rehabilitation planning, and evidence-based physiotherapy practice.",
+      "Completed postgraduate study in clinical reasoning, research appraisal, and patient-centred treatment design.",
+      "Strengthened practical decision-making for independent practice, outcome tracking, and long-term rehabilitation support.",
     ],
   },
   {
-    school: "Government Medical College Nagpur",
-    degree: "Bachelor of Physiotherapy",
+    school: "State University",
+    degree: "Bachelor of Science",
     field: "Physiotherapy",
-    period: "2018—2023",
+    period: "2018–2022",
     details: [
-      "Comprehensive study of anatomy, physiology, biomechanics, kinesiology, and pathology.",
-      "Clinical rotations in orthopaedics, neurology, cardiopulmonary, paediatrics, and sports rehabilitation.",
-      "Dissertation on effectiveness of manual therapy techniques in chronic low back pain management.",
+      "Studied anatomy, biomechanics, exercise therapy, orthopaedics, neurology, and rehabilitation sciences.",
+      "Completed clinical placements supporting patients across outpatient, orthopaedic, and community settings.",
+      "Built a strong foundation in assessment, treatment planning, and professional communication.",
     ],
   },
 ];
@@ -103,9 +103,9 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
               </div>
             </div>
             <div className="flex items-center gap-0.5 pl-9 text-sm text-muted-foreground">
-              <span>{entry.period.split("—")[0]}</span>
-              <span className="font-mono">—</span>
-              <span>{entry.period.split("—")[1]}</span>
+              <span>{entry.period.split("–")[0]}</span>
+              <span className="font-mono">–</span>
+              <span>{entry.period.split("–")[1]}</span>
             </div>
           </button>
 

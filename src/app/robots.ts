@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://sarthaknavalekar.com/sitemap.xml",
+    sitemap: "https://example.com/sitemap.xml",
   };
 }

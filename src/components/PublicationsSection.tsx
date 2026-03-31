@@ -17,22 +17,20 @@ interface Publication {
 
 const publications: Publication[] = [
   {
-    title:
-      "Comparison Between Immediate Effect Of Positional Release Technique And Ischemic Compression Release In Patients With Quadratus Lumborum Trigger Point On Pain Intensity And Pressure Threshold Having Non-Specific Low Back Pain",
-    type: "dissertation",
-    venue: "Government Medical College Nagpur",
-    year: "2023",
+    title: "Exercise Adherence in Private Musculoskeletal Practice",
+    type: "paper",
+    venue: "Independent Practice Journal",
+    year: "2025",
     description:
-      "Conducted a clinical research study comparing the immediate effectiveness of two evidence-based manual therapy interventions - Positional Release Technique (PRT) and Ischemic Compression Release (ICR) - for treating myofascial trigger points in the quadratus lumborum muscle among patients with chronic non-specific low back pain.",
+      "A placeholder research summary focused on helping patients stay consistent with rehabilitation plans through clear education, progressive goal setting, and practical home exercise design.",
   },
   {
-    title:
-      "Effect of NMES on quadriceps strength, balance, and mobility outcomes in acute stroke survivor",
-    type: "dissertation",
-    venue: "Glasgow Caledonian University (GCU)",
+    title: "Early Mobility Strategies After Orthopaedic Procedures",
+    type: "poster",
+    venue: "Regional Physiotherapy Conference",
     year: "2024",
     description:
-      "Investigating the effect of neuromuscular electrical stimulation (NMES) on quadriceps strength, balance, and mobility outcomes in acute stroke survivors.",
+      "A placeholder conference poster exploring safe early movement, confidence building, and staged return-to-function planning after common orthopaedic procedures.",
   },
 ];
 

@@ -10,9 +10,9 @@ import { StaggerContainer, StaggerItem, motion } from "@/components/Motion";
 import { useCallback } from "react";
 
 const links = [
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/sarthak-navalekar/", icon: LinkedInIcon },
-  { label: "Mail", href: "mailto:snaval300@caledonian.ac.uk", icon: MailIcon },
-  { label: "Resume", href: "https://drive.google.com/file/d/1AZStOPzqgW-0yYSbCrELkORRKVAUbCaG/view", icon: ResumeIcon },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name/", icon: LinkedInIcon },
+  { label: "Mail", href: "mailto:clinic@example.com", icon: MailIcon },
+  { label: "CV", href: "https://example.com/physio-cv.pdf", icon: ResumeIcon },
 ];
 
 function ContactLink({
@@ -54,19 +54,19 @@ function VCardButton() {
     const vcard = [
       "BEGIN:VCARD",
       "VERSION:3.0",
-      "FN:Sarthak Navalekar",
-      "N:Navalekar;Sarthak;Uday;;",
-      "TITLE:Physiotherapist",
-      "EMAIL:snaval300@caledonian.ac.uk",
-      "URL:https://www.linkedin.com/in/sarthak-navalekar/",
-      "ADR:;;;;;;Scotland, UK",
+      "FN:Alex Morgan",
+      "N:Morgan;Alex;;;",
+      "TITLE:Physiotherapy Practitioner",
+      "EMAIL:clinic@example.com",
+      "URL:https://www.linkedin.com/in/your-name/",
+      "ADR:;;;;;;Private Practice, UK",
       "END:VCARD",
     ].join("\r\n");
     const blob = new Blob([vcard], { type: "text/vcard" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "sarthak-navalekar.vcf";
+    a.download = "alex-morgan-physio.vcf";
     a.click();
     URL.revokeObjectURL(url);
   }, []);

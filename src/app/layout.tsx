@@ -15,23 +15,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sarthak Navalekar – Physiotherapist",
+  title: "Alex Morgan - Physiotherapy Practitioner",
   description:
-    "Sarthak Uday Navalekar – Physiotherapy Practitioner based in Scotland, UK",
-  authors: [{ name: "Sarthak Navalekar" }],
+    "Placeholder profile for a master's-qualified physiotherapy practitioner in independent practice.",
+  authors: [{ name: "Alex Morgan" }],
   keywords: [
-    "Sarthak Navalekar",
     "Physiotherapy",
-    "Physiotherapist",
-    "Scotland",
-    "Healthcare",
+    "Rehabilitation",
+    "Musculoskeletal",
+    "Private Practice",
+    "Master's Degree",
   ],
   manifest: "/manifest.json",
   other: {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
-    "apple-mobile-web-app-title": "Sarthak N",
+    "apple-mobile-web-app-title": "Alex Physio",
   },
 };
 

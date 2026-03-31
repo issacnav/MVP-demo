@@ -51,10 +51,10 @@ export function Footer({ showMascot = false }: { showMascot?: boolean }) {
           <div className="mt-6 flex flex-col leading-none">
             <Signature className="mb-2 w-24 text-foreground sm:w-28" />
             <span className="font-mono text-[12px] text-muted-foreground">
-              Â© 2026 Sarthak Navalekar
+              (c) 2026 Alex Morgan
             </span>
             <span className="font-mono text-[12px] text-muted-foreground">
-              Physiotherapist Â· Scotland, UK
+              Physiotherapy Practitioner / Private Practice
             </span>
           </div>
 

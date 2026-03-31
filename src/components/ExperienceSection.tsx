@@ -20,48 +20,48 @@ interface ExperienceEntry {
 
 const experiences: ExperienceEntry[] = [
   {
-    company: "Meditrina Institute of Medical Science",
+    company: "Independent Practice",
     title: "Physiotherapy Practitioner",
-    type: "Full-time",
-    period: "06.2023—06.2024",
+    type: "Self-employed",
+    period: "01.2024–Present",
     icon: "medical",
-    tags: ["Manual Therapy", "Electrotherapy", "Neurorehabilitation", "Orthopaedics", "Patient Assessment"],
+    tags: ["Musculoskeletal Rehab", "Manual Therapy", "Exercise Prescription", "Pain Management", "Patient Education"],
     bullets: [
-      "Conducted comprehensive physical assessments of musculoskeletal and neuromuscular conditions.",
-      "Delivered personalized rehabilitation programs for post-operative, geriatric, and neurological patients.",
-      "Managed pain using manual therapy, electrotherapy, and therapeutic exercise.",
-      "Collaborated with multidisciplinary teams including nurses, occupational therapists, and physicians.",
-      "Maintained accurate, confidential patient records in compliance with healthcare standards.",
+      "Provide one-to-one physiotherapy assessments and tailored rehabilitation plans for adults with musculoskeletal conditions.",
+      "Support patients through post-operative recovery, persistent pain management, and return-to-activity goals.",
+      "Use manual therapy, movement education, and graded exercise to improve mobility, confidence, and daily function.",
+      "Track progress closely and adapt treatment plans based on presentation, response to care, and patient priorities.",
+      "Build sustainable self-management plans so patients can continue progressing between sessions.",
     ],
   },
   {
-    company: "Healthcare Support Volunteer",
-    title: "Support Volunteer",
-    type: "Volunteer",
-    period: "01.2023—05.2024",
-    icon: "volunteer",
-    tags: ["Elderly Care", "Vital Signs", "Physiotherapy", "Fall Prevention"],
+    company: "City Wellness Clinic",
+    title: "Senior Physiotherapist",
+    type: "Part-time",
+    period: "06.2022–12.2023",
+    icon: "medical",
+    tags: ["Clinical Assessment", "Orthopaedics", "Rehab Planning", "Strength Recovery", "Documentation"],
     bullets: [
-      "Assisted elderly residents with activities of daily living including mobility, hygiene, and feeding.",
-      "Collaborated with nursing staff to monitor vital signs and ensure timely medication.",
-      "Supported physiotherapy sessions focused on balance, strength, and fall prevention.",
+      "Managed a mixed caseload of orthopaedic, sports injury, and mobility-focused rehabilitation patients.",
+      "Collaborated with fitness professionals and referring clinicians to support safe return to work and sport.",
+      "Maintained clear clinical notes, outcome measures, and treatment plans across follow-up appointments.",
     ],
   },
   {
-    company: "Stroke Association",
-    title: "Community Connector",
-    type: "Volunteer",
-    period: "11.2025—Present",
+    company: "Community Rehabilitation Service",
+    title: "Physiotherapist",
+    type: "Full-time",
+    period: "08.2020–05.2022",
     icon: "volunteer",
-    tags: ["Community Health", "Stroke Support"],
+    tags: ["Falls Prevention", "Functional Mobility", "Home Exercise", "Community Care"],
   },
   {
-    company: "Chest Heart & Stroke Scotland",
-    title: "Community Support Services Group Volunteer",
+    company: "Volunteer Mobility Programme",
+    title: "Rehab Support Volunteer",
     type: "Volunteer",
-    period: "11.2025—Present",
+    period: "01.2019–07.2020",
     icon: "volunteer",
-    tags: ["Community Support", "Healthcare Advocacy"],
+    tags: ["Community Support", "Patient Guidance", "Wellbeing"],
   },
 ];
 
@@ -132,9 +132,9 @@ function ExperienceItem({ entry }: { entry: ExperienceEntry }) {
               <dl>
                 <dt className="sr-only">Employment Period</dt>
                 <dd className="flex items-center gap-0.5">
-                  <span>{entry.period.split("—")[0]}</span>
-                  <span className="font-mono">—</span>
-                  <span>{entry.period.split("—")[1]}</span>
+                  <span>{entry.period.split("–")[0]}</span>
+                  <span className="font-mono">–</span>
+                  <span>{entry.period.split("–")[1]}</span>
                 </dd>
               </dl>
             </div>

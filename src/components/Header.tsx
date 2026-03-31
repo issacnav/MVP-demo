@@ -53,7 +53,7 @@ export function Header() {
         <Link href="/" aria-label="Home" className="transition-[scale] ease-out active:scale-[0.98]">
           <motion.img
             src="/images/icon.svg"
-            alt="Sarthak Navalekar"
+            alt="Template logo"
             className="h-9 w-9"
             whileHover={{ rotate: 8, scale: 1.1 }}
             transition={{ type: "spring", stiffness: 300 }}
