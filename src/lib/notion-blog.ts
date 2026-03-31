@@ -12,6 +12,7 @@ import { NotionToMarkdown } from "notion-to-md";
 import { seedBlogPost } from "@/lib/seed-blog-post";
 
 export const BLOG_REVALIDATE_SECONDS = 60;
+export const BLOG_CACHE_TAG = "notion-blog";
 
 export type BlogPostPreview = {
   pageId: string;
@@ -285,6 +286,7 @@ async function fetchPublishedPreviews(): Promise<BlogIndexResult> {
 
 const getPublishedPreviews = unstable_cache(fetchPublishedPreviews, ["notion-blog-index"], {
   revalidate: BLOG_REVALIDATE_SECONDS,
+  tags: [BLOG_CACHE_TAG],
 });
 
 async function fetchMarkdownForPage(pageId: string) {
@@ -308,7 +310,10 @@ function getMarkdownForPage(pageId: string) {
   return unstable_cache(
     async () => fetchMarkdownForPage(pageId),
     ["notion-blog-page", pageId],
-    { revalidate: BLOG_REVALIDATE_SECONDS }
+    {
+      revalidate: BLOG_REVALIDATE_SECONDS,
+      tags: [BLOG_CACHE_TAG],
+    }
   )();
 }
 
@@ -321,6 +326,7 @@ export const getBlogStaticParams = unstable_cache(async () => {
   return posts.map((post) => ({ slug: post.slug }));
 }, ["notion-blog-static-params"], {
   revalidate: BLOG_REVALIDATE_SECONDS,
+  tags: [BLOG_CACHE_TAG],
 });
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPostResult> {
