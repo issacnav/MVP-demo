@@ -9,14 +9,10 @@ import { PublicationsSection } from "@/components/PublicationsSection";
 import { QuoteSection } from "@/components/QuoteSection";
 import { Footer } from "@/components/Footer";
 import { SectionSeparator } from "@/components/LayoutParts";
-import { CommandPalette } from "@/components/CommandPalette";
-import { ScrollToTop } from "@/components/ScrollToTop";
 
 export default function Home() {
   return (
     <>
-      <CommandPalette />
-      <ScrollToTop />
       {/* Scroll fade overlay */}
       <div className="pointer-events-none fixed inset-x-0 top-0 z-40 h-16 bg-gradient-to-b from-background to-transparent" />
       <Header />

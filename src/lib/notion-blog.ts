@@ -1,6 +1,6 @@
 import "server-only";
 
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import {
   Client,
   collectPaginatedAPI,
@@ -11,7 +11,7 @@ import {
 import { NotionToMarkdown } from "notion-to-md";
 import { seedBlogPost } from "@/lib/seed-blog-post";
 
-export const BLOG_REVALIDATE_SECONDS = 3600;
+export const BLOG_REVALIDATE_SECONDS = 60;
 
 export type BlogPostPreview = {
   pageId: string;
@@ -229,7 +229,7 @@ function mergeWithSeed(posts: BlogPostPreview[]) {
   return [seedPreview];
 }
 
-const getPublishedPreviews = cache(async (): Promise<BlogIndexResult> => {
+async function fetchPublishedPreviews(): Promise<BlogIndexResult> {
   if (!isConfigured()) {
     return {
       posts: mergeWithSeed([]),
@@ -281,9 +281,13 @@ const getPublishedPreviews = cache(async (): Promise<BlogIndexResult> => {
       configured: true,
     };
   }
+}
+
+const getPublishedPreviews = unstable_cache(fetchPublishedPreviews, ["notion-blog-index"], {
+  revalidate: BLOG_REVALIDATE_SECONDS,
 });
 
-const getMarkdownForPage = cache(async (pageId: string) => {
+async function fetchMarkdownForPage(pageId: string) {
   const notion = createNotionClient();
 
   if (!notion) {
@@ -298,15 +302,25 @@ const getMarkdownForPage = cache(async (pageId: string) => {
   const markdown = n2m.toMarkdownString(markdownBlocks).parent;
 
   return markdown.trim();
-});
+}
+
+function getMarkdownForPage(pageId: string) {
+  return unstable_cache(
+    async () => fetchMarkdownForPage(pageId),
+    ["notion-blog-page", pageId],
+    { revalidate: BLOG_REVALIDATE_SECONDS }
+  )();
+}
 
 export async function getBlogIndexData(): Promise<BlogIndexResult> {
   return getPublishedPreviews();
 }
 
-export const getBlogStaticParams = cache(async () => {
+export const getBlogStaticParams = unstable_cache(async () => {
   const { posts } = await getPublishedPreviews();
   return posts.map((post) => ({ slug: post.slug }));
+}, ["notion-blog-static-params"], {
+  revalidate: BLOG_REVALIDATE_SECONDS,
 });
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPostResult> {
