@@ -45,7 +45,7 @@ export default function Home() {
           <QuoteSection />
           <SectionSeparator />
 
-          <Footer />
+          <Footer showMascot />
         </div>
       </main>
     </>
