@@ -10,7 +10,7 @@ const ThemeContext = createContext<{
   colorTheme: ColorTheme;
   setTheme: (t: Theme, event?: React.MouseEvent) => void;
   setColorTheme: (c: ColorTheme) => void;
-}>({ theme: "system", colorTheme: "default", setTheme: () => {}, setColorTheme: () => {} });
+}>({ theme: "light", colorTheme: "default", setTheme: () => {}, setColorTheme: () => {} });
 
 export function useTheme() {
   return useContext(ThemeContext);
@@ -60,13 +60,13 @@ function playToggleSound(isDark: boolean) {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("system");
+  const [theme, setThemeState] = useState<Theme>("light");
   const [colorTheme, setColorThemeState] = useState<ColorTheme>("default");
   const initializedRef = useRef(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("theme") as Theme | null;
-    const initial = stored && ["light", "dark", "system"].includes(stored) ? stored : "system";
+    const initial = stored && ["light", "dark", "system"].includes(stored) ? stored : "light";
     setThemeState(initial);
     applyTheme(initial);
 
