@@ -42,6 +42,11 @@ const typeConfig = {
   poster: { icon: Presentation, label: "Poster" },
 };
 
+const accordionTransition = {
+  duration: 0.28,
+  ease: [0.21, 0.47, 0.32, 0.98] as const,
+};
+
 export function PublicationsSection() {
   const [openTitle, setOpenTitle] = useState<string | null>(null);
 
@@ -56,7 +61,7 @@ export function PublicationsSection() {
 
             return (
               <StaggerItem key={pub.title}>
-                <div className="rounded-lg border border-border p-4">
+                <motion.div layout className="rounded-lg border border-border p-4" transition={accordionTransition}>
                   <div className="flex items-start gap-3">
                     <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-muted-foreground/15 bg-muted text-muted-foreground">
                       <Icon className="size-4" />
@@ -67,16 +72,18 @@ export function PublicationsSection() {
                           type="button"
                           onClick={() => setOpenTitle(isOpen ? null : pub.title)}
                           aria-expanded={isOpen}
-                          className="flex min-w-0 flex-1 items-start justify-between gap-3 text-left"
+                          className="group flex min-w-0 flex-1 items-start justify-between gap-3 text-left"
                         >
                           <h3 className="font-mono text-sm font-medium text-foreground">
                             {pub.title}
                           </h3>
-                          <ChevronDown
-                            className={`mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform ${
-                              isOpen ? "rotate-180" : ""
-                            }`}
-                          />
+                          <motion.div
+                            animate={{ rotate: isOpen ? 180 : 0, opacity: isOpen ? 1 : 0.8 }}
+                            transition={accordionTransition}
+                            className="transition-transform duration-200 ease-out group-hover:translate-y-0.5"
+                          >
+                            <ChevronDown className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                          </motion.div>
                         </button>
                         <span className="inline-flex w-fit shrink-0 items-center rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground sm:mt-0.5">
                           {config.label}
@@ -88,10 +95,10 @@ export function PublicationsSection() {
                       <AnimatePresence initial={false}>
                         {pub.description && isOpen && (
                           <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
+                            initial={{ opacity: 0, height: 0, y: -4 }}
+                            animate={{ opacity: 1, height: "auto", y: 0 }}
+                            exit={{ opacity: 0, height: 0, y: -4 }}
+                            transition={accordionTransition}
                             className="overflow-hidden"
                           >
                             <p className="mt-2 font-mono text-sm leading-relaxed text-muted-foreground">
@@ -102,7 +109,7 @@ export function PublicationsSection() {
                       </AnimatePresence>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </StaggerItem>
             );
           })}

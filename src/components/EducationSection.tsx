@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Panel } from "@/components/LayoutParts";
 import { GraduationCapIcon, ExpandIcon } from "@/components/icons";
 import { FadeIn, motion } from "@/components/Motion";
@@ -40,14 +41,23 @@ const educations: EducationEntry[] = [
   },
 ];
 
+const accordionTransition = {
+  duration: 0.28,
+  ease: [0.21, 0.47, 0.32, 0.98] as const,
+};
+
 function EducationItem({ entry }: { entry: EducationEntry }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="screen-line-after space-y-4 py-4">
+    <motion.div layout className="screen-line-after space-y-4 py-4" transition={accordionTransition}>
       <div className="flex items-center gap-3">
         <div className="flex size-6 shrink-0 items-center justify-center select-none">
-          <span className="flex size-2 rounded-full bg-zinc-300 dark:bg-zinc-600" />
+          <motion.span
+            className={`flex size-2 rounded-full ${open ? "bg-info" : "bg-zinc-300 dark:bg-zinc-600"}`}
+            animate={{ scale: open ? 1.2 : 1, opacity: open ? 1 : 0.8 }}
+            transition={accordionTransition}
+          />
         </div>
         <h3 className="flex-1 text-base leading-snug font-medium sm:text-lg">
           {entry.schoolUrl ? (
@@ -70,7 +80,7 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
           <button
             type="button"
             onClick={() => setOpen(!open)}
-            className="block w-full text-left relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out hover:before:bg-accent/50"
+            className="group block w-full text-left relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out hover:before:bg-accent/50"
           >
             <div className="relative z-1 mb-1 flex items-center gap-3">
               <div className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background">
@@ -83,7 +93,13 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
                 </span>
               </h4>
               <div className="shrink-0 text-muted-foreground [&_svg]:size-4">
-                <ExpandIcon />
+                <motion.div
+                  animate={{ y: open ? 1 : 0, opacity: open ? 1 : 0.75 }}
+                  transition={accordionTransition}
+                  className="transition-transform duration-200 ease-out group-hover:translate-y-0.5"
+                >
+                  <ExpandIcon />
+                </motion.div>
               </div>
             </div>
             <div className="flex items-center gap-0.5 pl-9 text-sm text-muted-foreground">
@@ -93,26 +109,29 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
             </div>
           </button>
 
-          {open && entry.details && (
-            <motion.div
-              className="pl-9 pt-2 text-sm text-muted-foreground"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              transition={{ duration: 0.3 }}
-            >
-              <ul className="space-y-1.5">
-                {entry.details.map((detail, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-info" />
-                    {detail}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          )}
+          <AnimatePresence initial={false}>
+            {open && entry.details && (
+              <motion.div
+                className="overflow-hidden pl-9 pt-2 text-sm text-muted-foreground"
+                initial={{ opacity: 0, height: 0, y: -4 }}
+                animate={{ opacity: 1, height: "auto", y: 0 }}
+                exit={{ opacity: 0, height: 0, y: -4 }}
+                transition={accordionTransition}
+              >
+                <ul className="space-y-1.5">
+                  {entry.details.map((detail, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-info" />
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

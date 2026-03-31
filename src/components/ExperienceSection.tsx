@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Panel } from "@/components/LayoutParts";
 import { ExpandIcon } from "@/components/icons";
 import { Heart, HandHelping } from "lucide-react";
@@ -64,16 +65,25 @@ const experiences: ExperienceEntry[] = [
   },
 ];
 
+const accordionTransition = {
+  duration: 0.28,
+  ease: [0.21, 0.47, 0.32, 0.98] as const,
+};
+
 function ExperienceItem({ entry }: { entry: ExperienceEntry }) {
   const [open, setOpen] = useState(false);
 
   const IconComponent = entry.icon === "medical" ? Heart : HandHelping;
 
   return (
-    <div className="screen-line-after space-y-4 py-4">
+    <motion.div layout className="screen-line-after space-y-4 py-4" transition={accordionTransition}>
       <div className="flex items-center gap-3">
         <div className="flex size-6 shrink-0 items-center justify-center select-none">
-          <span className="flex size-2 rounded-full bg-zinc-300 dark:bg-zinc-600" />
+          <motion.span
+            className={`flex size-2 rounded-full ${open ? "bg-info" : "bg-zinc-300 dark:bg-zinc-600"}`}
+            animate={{ scale: open ? 1.2 : 1, opacity: open ? 1 : 0.8 }}
+            transition={accordionTransition}
+          />
         </div>
         <h3 className="text-base leading-snug font-medium sm:text-lg">
           {entry.companyUrl ? (
@@ -96,7 +106,7 @@ function ExperienceItem({ entry }: { entry: ExperienceEntry }) {
           <button
             type="button"
             onClick={() => setOpen(!open)}
-            className="block w-full text-left relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out hover:before:bg-accent/50"
+            className="group relative block w-full text-left before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:-z-1 before:rounded-lg before:transition-[background-color] before:ease-out hover:before:bg-accent/50"
           >
             <div className="relative z-1 mb-1 flex items-center gap-3">
               <div className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground border border-muted-foreground/15 ring-1 ring-edge ring-offset-1 ring-offset-background">
@@ -104,7 +114,13 @@ function ExperienceItem({ entry }: { entry: ExperienceEntry }) {
               </div>
               <h4 className="flex-1 font-medium text-balance">{entry.title}</h4>
               <div className="shrink-0 text-muted-foreground [&_svg]:size-4">
-                <ExpandIcon />
+                <motion.div
+                  animate={{ y: open ? 1 : 0, opacity: open ? 1 : 0.75 }}
+                  transition={accordionTransition}
+                  className="transition-transform duration-200 ease-out group-hover:translate-y-0.5"
+                >
+                  <ExpandIcon />
+                </motion.div>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2 pl-9 text-xs text-muted-foreground sm:text-sm">
@@ -124,21 +140,23 @@ function ExperienceItem({ entry }: { entry: ExperienceEntry }) {
             </div>
           </button>
 
-          {open && entry.bullets && (
-            <motion.ul
-              className="pl-9 pt-2 text-sm text-muted-foreground space-y-1 list-disc list-inside"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {entry.bullets.map((b, i) => (
-                <li key={i}>{b}</li>
-              ))}
-            </motion.ul>
-          )}
+          <AnimatePresence initial={false}>
+            {open && entry.bullets && (
+              <motion.ul
+                className="overflow-hidden pl-9 pt-2 text-sm text-muted-foreground space-y-1 list-disc list-inside"
+                initial={{ opacity: 0, height: 0, y: -4 }}
+                animate={{ opacity: 1, height: "auto", y: 0 }}
+                exit={{ opacity: 0, height: 0, y: -4 }}
+                transition={accordionTransition}
+              >
+                {entry.bullets.map((b, i) => (
+                  <li key={i}>{b}</li>
+                ))}
+              </motion.ul>
+            )}
+          </AnimatePresence>
 
-          <ul className="flex flex-wrap gap-1.5 pt-3 pl-9">
+          <motion.ul layout className="flex flex-wrap gap-1.5 pt-3 pl-9" transition={accordionTransition}>
             {entry.tags.map((tag) => (
               <li key={tag} className="flex">
                 <span className="inline-flex items-center rounded-lg border bg-zinc-50 px-1.5 py-0.5 font-mono text-xs text-muted-foreground dark:bg-zinc-900">
@@ -146,10 +164,10 @@ function ExperienceItem({ entry }: { entry: ExperienceEntry }) {
                 </span>
               </li>
             ))}
-          </ul>
+          </motion.ul>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

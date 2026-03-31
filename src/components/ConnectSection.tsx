@@ -15,6 +15,40 @@ const links = [
   { label: "Resume", href: "https://drive.google.com/file/d/1AZStOPzqgW-0yYSbCrELkORRKVAUbCaG/view", icon: ResumeIcon },
 ];
 
+function ContactLink({
+  label,
+  href,
+  icon: Icon,
+}: {
+  label: string;
+  href: string;
+  icon: typeof LinkedInIcon;
+}) {
+  return (
+    <a
+      className="group touch-manipulation active:opacity-75"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <motion.div
+        className="h-9 select-none flex items-center gap-2 whitespace-nowrap rounded-xl border border-neutral-200 bg-white px-3 shadow-sm transition-all duration-200 hover:bg-neutral-50 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700 dark:hover:bg-neutral-800"
+        whileHover={{ scale: 1.05, y: -2 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      >
+        <span className="shrink-0 transition-transform duration-200 ease-out group-hover:translate-x-0.5">
+          <Icon className="size-[14px] text-neutral-800 dark:text-white/80" />
+        </span>
+        <span className="relative text-xs font-medium leading-none text-neutral-800 dark:text-white/80">
+          {label}
+          <span className="pointer-events-none absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-current transition-transform duration-200 ease-out group-hover:scale-x-100" />
+        </span>
+      </motion.div>
+    </a>
+  );
+}
+
 function VCardButton() {
   const download = useCallback(() => {
     const vcard = [
@@ -77,24 +111,7 @@ export function ConnectSection() {
         <StaggerContainer className="flex flex-wrap items-center gap-3 overflow-visible pb-1 sm:gap-4">
           {links.map((link) => (
             <StaggerItem key={link.label} className="relative inline-block">
-              <a
-                className="touch-manipulation active:opacity-75"
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <motion.div
-                  className="justify-center rounded-xl border transition-all duration-200 border-neutral-200 bg-white hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700 dark:hover:bg-neutral-800 shadow-sm hover:shadow-md h-9 px-3 flex items-center gap-2 whitespace-nowrap select-none"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  <link.icon className="size-[14px] shrink-0 text-neutral-800 dark:text-white/80" />
-                  <span className="text-xs font-medium leading-none text-neutral-800 dark:text-white/80">
-                    {link.label}
-                  </span>
-                </motion.div>
-              </a>
+              <ContactLink {...link} />
             </StaggerItem>
           ))}
           <StaggerItem className="relative inline-block">
