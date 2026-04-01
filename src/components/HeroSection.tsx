@@ -114,13 +114,21 @@ function PronounceName() {
 
 export function HeroSection() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
+  const [mayaAnimation, setMayaAnimation] = useState<object | null>(null);
   const [catAnimation, setCatAnimation] = useState<object | null>(null);
+  const [showCatAvatar, setShowCatAvatar] = useState(false);
 
   useEffect(() => {
+    import("../../public/lottie/maya-avatar.json").then((mod) => {
+      setMayaAnimation(mod.default);
+    });
     import("../../public/loader-cat.json").then((mod) => {
       setCatAnimation(mod.default);
     });
   }, []);
+
+  const activeAnimation = showCatAvatar ? catAnimation : mayaAnimation;
+  const activeAvatarLabel = showCatAvatar ? "cat" : "maya";
 
   return (
     <>
@@ -143,24 +151,39 @@ export function HeroSection() {
 
         {/* Avatar */}
         <ScaleIn delay={0.2} className="w-[35%] shrink-0 p-2 sm:w-auto sm:shrink-0 sm:p-5">
-          <motion.div
+          <motion.button
+            type="button"
+            onClick={() => setShowCatAvatar((current) => !current)}
+            aria-label={showCatAvatar ? "Switch avatar to Maya" : "Switch avatar to cat"}
             className="aspect-square h-auto w-full rounded-[12px] border border-border p-[4px] transition duration-200 hover:brightness-95 sm:size-32"
             whileHover={{ scale: 1.07, y: -3, rotate: -1.8, rotateX: 2.5, rotateY: -5.5 }}
+            whileTap={{ scale: 0.98 }}
             transition={{ type: "spring", stiffness: 560, damping: 17, mass: 0.58 }}
             style={{ transformPerspective: 1000 }}
           >
             <div className="relative flex aspect-square h-auto w-full items-center justify-center overflow-hidden rounded-[8px] bg-muted/30">
-              {catAnimation && (
-                <Lottie
-                  lottieRef={lottieRef}
-                  animationData={catAnimation}
-                  loop
-                  autoplay
-                  className="h-full w-full scale-[1.15]"
-                />
-              )}
+              <AnimatePresence mode="wait" initial={false}>
+                {activeAnimation && (
+                  <motion.div
+                    key={activeAvatarLabel}
+                    className="absolute inset-0"
+                    initial={{ opacity: 0, scale: 0.96, rotate: -8 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 0.96, rotate: 8 }}
+                    transition={{ duration: 0.28, ease: [0.21, 0.47, 0.32, 0.98] }}
+                  >
+                    <Lottie
+                      lottieRef={lottieRef}
+                      animationData={activeAnimation}
+                      loop
+                      autoplay
+                      className="h-full w-full scale-[1.15]"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </motion.div>
+          </motion.button>
         </ScaleIn>
 
         {/* Info */}
