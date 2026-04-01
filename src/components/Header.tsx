@@ -70,12 +70,6 @@ export function Header() {
             Home
           </Link>
           <Link
-            href="/projects"
-            className="font-mono text-sm font-medium text-muted-foreground transition-[color] duration-300 hover:text-foreground"
-          >
-            Projects
-          </Link>
-          <Link
             href="/services"
             className="font-mono text-sm font-medium text-muted-foreground transition-[color] duration-300 hover:text-foreground"
           >
@@ -224,13 +218,6 @@ export function Header() {
                 onClick={() => setMenuOpen(false)}
               >
                 Home
-              </Link>
-              <Link
-                href="/projects"
-                className="font-mono text-sm font-medium text-muted-foreground py-1"
-                onClick={() => setMenuOpen(false)}
-              >
-                Projects
               </Link>
               <Link
                 href="/services"
