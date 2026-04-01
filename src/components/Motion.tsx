@@ -1,7 +1,46 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, type Variants, useReducedMotion } from "framer-motion";
 import { type ReactNode } from "react";
+
+const standardEase = [0.21, 0.47, 0.32, 0.98] as const;
+
+const staggerContainer: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const reducedStaggerContainer: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0,
+      delayChildren: 0,
+    },
+  },
+};
+
+const staggerItem: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: standardEase },
+  },
+};
+
+const reducedStaggerItem: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.16, ease: standardEase },
+  },
+};
 
 // Reusable fade-in-up animation triggered on scroll
 export function FadeIn({
@@ -17,38 +56,24 @@ export function FadeIn({
   className?: string;
   y?: number;
 }) {
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y }}
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+      transition={{
+        duration: shouldReduceMotion ? Math.min(duration, 0.18) : duration,
+        delay: shouldReduceMotion ? 0 : delay,
+        ease: standardEase,
+      }}
       className={className}
     >
       {children}
     </motion.div>
   );
 }
-
-// Staggered children container
-const staggerContainer: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const staggerItem: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] },
-  },
-};
 
 export function StaggerContainer({
   children,
@@ -57,9 +82,11 @@ export function StaggerContainer({
   children: ReactNode;
   className?: string;
 }) {
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
   return (
     <motion.div
-      variants={staggerContainer}
+      variants={shouldReduceMotion ? reducedStaggerContainer : staggerContainer}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
@@ -77,8 +104,13 @@ export function StaggerItem({
   children: ReactNode;
   className?: string;
 }) {
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
   return (
-    <motion.div variants={staggerItem} className={className}>
+    <motion.div
+      variants={shouldReduceMotion ? reducedStaggerItem : staggerItem}
+      className={className}
+    >
       {children}
     </motion.div>
   );
@@ -94,12 +126,18 @@ export function ScaleIn({
   delay?: number;
   className?: string;
 }) {
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
+      initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+      transition={{
+        duration: shouldReduceMotion ? 0.18 : 0.5,
+        delay: shouldReduceMotion ? 0 : delay,
+        ease: standardEase,
+      }}
       className={className}
     >
       {children}
@@ -119,13 +157,19 @@ export function SlideIn({
   delay?: number;
   className?: string;
 }) {
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const x = direction === "left" ? -30 : 30;
+
   return (
     <motion.div
-      initial={{ opacity: 0, x }}
+      initial={{ opacity: 0, x: shouldReduceMotion ? 0 : x }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+      transition={{
+        duration: shouldReduceMotion ? 0.18 : 0.5,
+        delay: shouldReduceMotion ? 0 : delay,
+        ease: standardEase,
+      }}
       className={className}
     >
       {children}

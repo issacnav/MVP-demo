@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { VerifiedIcon } from "@/components/icons";
 import { CrossMarker } from "@/components/LayoutParts";
 import { FadeIn, ScaleIn, SlideIn, motion } from "@/components/Motion";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, useReducedMotion } from "framer-motion";
 import type { LottieRefCurrentProps } from "lottie-react";
 
 const Lottie = dynamic(() => import("lottie-react").then((m) => m.default), {
@@ -15,62 +15,59 @@ const Lottie = dynamic(() => import("lottie-react").then((m) => m.default), {
 const titles = ["Physiotherapist", "MSK Rehab", "Manual Therapy", "Private Practice"];
 
 function TextFlip() {
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const [index, setIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    if (shouldReduceMotion || isPaused) {
+      return;
+    }
+
     const interval = setInterval(() => {
       setIndex((i) => (i + 1) % titles.length);
     }, 2500);
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused, shouldReduceMotion]);
+
+  if (shouldReduceMotion) {
+    return <span className="whitespace-nowrap">{titles[0]}</span>;
+  }
 
   return (
-    <span className="relative inline-grid h-[1.2em] overflow-hidden align-bottom">
-      {/* Invisible spacers stacked on same grid cell - sizes container to widest title */}
-      {titles.map((t) => (
-        <span key={t} className="invisible col-start-1 row-start-1 whitespace-nowrap" aria-hidden="true">{t}</span>
-      ))}
-      <AnimatePresence mode="popLayout">
-        <motion.span
-          key={titles[index]}
-          initial={{ y: "100%", opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: "-100%", opacity: 0 }}
-          transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="col-start-1 row-start-1 whitespace-nowrap"
-        >
-          {titles[index]}
-        </motion.span>
-      </AnimatePresence>
-    </span>
-  );
-}
-
-function LocalTime() {
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-    const update = () => {
-      setTime(
-        new Intl.DateTimeFormat("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZone: "Europe/London",
-          hour12: false,
-        }).format(new Date())
-      );
-    };
-    update();
-    const interval = setInterval(update, 30_000);
-    return () => clearInterval(interval);
-  }, []);
-
-  if (!time) return null;
-
-  return (
-    <span className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground sm:text-sm">
-      <span>Time</span>
-      <span>{time} Local</span>
+    <span className="inline-flex items-center gap-2">
+      <span className="sr-only">
+        Specialties include Physiotherapist, MSK Rehab, Manual Therapy, and Private Practice.
+      </span>
+      <span className="relative inline-grid h-[1.2em] overflow-hidden align-bottom" aria-hidden="true">
+        {/* Invisible spacers stacked on same grid cell - sizes container to widest title */}
+        {titles.map((t) => (
+          <span key={t} className="invisible col-start-1 row-start-1 whitespace-nowrap" aria-hidden="true">
+            {t}
+          </span>
+        ))}
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={titles[index]}
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "-100%", opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="col-start-1 row-start-1 whitespace-nowrap"
+          >
+            {titles[index]}
+          </motion.span>
+        </AnimatePresence>
+      </span>
+      <button
+        type="button"
+        onClick={() => setIsPaused((current) => !current)}
+        aria-pressed={isPaused}
+        aria-label={isPaused ? "Resume rotating specialties" : "Pause rotating specialties"}
+        className="inline-flex items-center rounded-md border border-border px-1.5 py-0.5 font-mono text-[10px] leading-none text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+      >
+        {isPaused ? "Play" : "Pause"}
+      </button>
     </span>
   );
 }
@@ -114,6 +111,7 @@ function PronounceName() {
 
 export function HeroSection() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const [mayaAnimation, setMayaAnimation] = useState<object | null>(null);
   const [catAnimation, setCatAnimation] = useState<object | null>(null);
   const [showCatAvatar, setShowCatAvatar] = useState(false);
@@ -129,6 +127,9 @@ export function HeroSection() {
 
   const activeAnimation = showCatAvatar ? catAnimation : mayaAnimation;
   const activeAvatarLabel = showCatAvatar ? "cat" : "maya";
+  const handleAvatarComplete = useCallback(() => {
+    lottieRef.current?.pause();
+  }, []);
 
   return (
     <>
@@ -175,8 +176,9 @@ export function HeroSection() {
                     <Lottie
                       lottieRef={lottieRef}
                       animationData={activeAnimation}
-                      loop
-                      autoplay
+                      loop={false}
+                      autoplay={!shouldReduceMotion}
+                      onComplete={handleAvatarComplete}
                       className="h-full w-full scale-[1.15]"
                     />
                   </motion.div>
@@ -207,9 +209,9 @@ export function HeroSection() {
           </SlideIn>
 
           <FadeIn delay={0.5}>
-            <div className="flex items-baseline gap-0 font-mono text-sm leading-snug text-muted-foreground sm:text-base">
+            <div className="flex flex-wrap items-center gap-1.5 font-mono text-sm leading-snug text-muted-foreground sm:text-base">
               <TextFlip />
-              <span className="mx-1.5">/</span>
+              <span aria-hidden="true">/</span>
               <span className="whitespace-nowrap">Independent Practice / UK</span>
             </div>
           </FadeIn>

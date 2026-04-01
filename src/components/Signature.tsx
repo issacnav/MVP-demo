@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import {
   type Easing,
   motion,
   type Variants,
   useAnimation,
   useInView,
+  useReducedMotion,
 } from "framer-motion";
 import { useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -78,20 +79,45 @@ export type SignatureProps = React.ComponentProps<"div">;
 export const Signature = ({ className, ...props }: SignatureProps) => {
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);
+  const hasPlayedRef = useRef(false);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const [hasPlayed, setHasPlayed] = useState(false);
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   useEffect(() => {
-    if (isInView && !hasPlayed) {
-      controls.start("animate");
-      setHasPlayed(true);
+    if (shouldReduceMotion) {
+      return;
     }
-  }, [isInView, hasPlayed, controls]);
+
+    if (isInView && !hasPlayedRef.current) {
+      hasPlayedRef.current = true;
+      controls.start("animate");
+    }
+  }, [isInView, controls, shouldReduceMotion]);
 
   const replay = useCallback(() => {
     controls.set("initial");
     controls.start("animate");
   }, [controls]);
+
+  if (shouldReduceMotion) {
+    return (
+      <div ref={ref} className={cn("h-auto w-full", className)} {...props}>
+        <svg
+          viewBox="0 11.04 75.92 30.2"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-auto w-full overflow-visible"
+        >
+          {PATHS.map((d, i) => (
+            <g key={i}>
+              <path d={d} fill="currentColor" opacity={0.08} />
+              <path d={d} fill="currentColor" />
+            </g>
+          ))}
+        </svg>
+      </div>
+    );
+  }
 
   return (
     <div

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false);
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 400);
@@ -19,7 +20,12 @@ export function ScrollToTop() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() =>
+            window.scrollTo({
+              top: 0,
+              behavior: shouldReduceMotion ? "auto" : "smooth",
+            })
+          }
           className="fixed bottom-6 right-6 z-50 flex size-10 items-center justify-center rounded-full border border-border bg-background shadow-lg transition-colors hover:bg-accent"
           aria-label="Scroll to top"
         >

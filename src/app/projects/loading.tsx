@@ -1,7 +1,7 @@
 import { CrossMarker, SectionSeparator } from "@/components/LayoutParts";
 
 function Skeleton({ className }: { className?: string }) {
-  return <div className={`animate-pulse rounded bg-muted ${className ?? ""}`} />;
+  return <div className={`motion-safe:animate-pulse motion-reduce:animate-none rounded bg-muted ${className ?? ""}`} />;
 }
 
 export default function ProjectsLoading() {

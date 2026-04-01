@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, type TouchEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -28,18 +29,17 @@ export default function ThreeDCarousel({
   cardHeight = 410,
   isMobileSwipe = true,
 }: ThreeDCarouselProps) {
-  if (items.length === 0) {
-    return null;
-  }
-
   const [active, setActive] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const isMobile = useIsMobile();
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const minSwipeDistance = 50;
+  const rotationPaused = isPaused || shouldReduceMotion;
 
   useEffect(() => {
     if (!carouselRef.current) {
@@ -56,7 +56,7 @@ export default function ThreeDCarousel({
   }, []);
 
   useEffect(() => {
-    if (!autoRotate || !isInView || isHovering || items.length < 2) {
+    if (!autoRotate || rotationPaused || !isInView || isHovering || items.length < 2) {
       return;
     }
 
@@ -65,7 +65,7 @@ export default function ThreeDCarousel({
     }, rotateInterval);
 
     return () => window.clearInterval(interval);
-  }, [autoRotate, isHovering, isInView, items.length, rotateInterval]);
+  }, [autoRotate, isHovering, isInView, items.length, rotateInterval, rotationPaused]);
 
   const onTouchStart = (e: TouchEvent) => {
     if (!isMobileSwipe) {
@@ -91,13 +91,21 @@ export default function ThreeDCarousel({
 
     const distance = touchStart - touchEnd;
     if (distance > minSwipeDistance) {
+      setIsPaused(true);
       setActive((prev) => (prev + 1) % items.length);
     } else if (distance < -minSwipeDistance) {
+      setIsPaused(true);
       setActive((prev) => (prev - 1 + items.length) % items.length);
     }
   };
 
   const getCardAnimationClass = (index: number) => {
+    if (shouldReduceMotion) {
+      return index === active
+        ? "translate-x-0 scale-100 opacity-100 z-30"
+        : "translate-x-0 scale-100 opacity-0 z-0 pointer-events-none";
+    }
+
     if (index === active) {
       return "translate-x-0 rotate-0 scale-100 opacity-100 z-30";
     }
@@ -114,12 +122,18 @@ export default function ThreeDCarousel({
   };
 
   const goToPrevious = () => {
+    setIsPaused(true);
     setActive((prev) => (prev - 1 + items.length) % items.length);
   };
 
   const goToNext = () => {
+    setIsPaused(true);
     setActive((prev) => (prev + 1) % items.length);
   };
+
+  if (items.length === 0) {
+    return null;
+  }
 
   return (
     <section
@@ -134,6 +148,7 @@ export default function ThreeDCarousel({
           className="relative h-[470px] overflow-hidden sm:h-[510px]"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
+          onFocusCapture={() => setIsPaused(true)}
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
@@ -148,11 +163,16 @@ export default function ThreeDCarousel({
           }}
           tabIndex={0}
         >
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            aria-live={rotationPaused ? "polite" : "off"}
+          >
             {items.map((item, index) => (
               <div
                 key={item.id}
-                className={`absolute top-3 w-full max-w-[460px] transform px-2 transition-all duration-500 ease-out sm:max-w-[480px] sm:px-0 ${getCardAnimationClass(index)}`}
+                className={`absolute top-3 w-full max-w-[460px] transform px-2 transition-all ${
+                  shouldReduceMotion ? "duration-150" : "duration-500"
+                } ease-out sm:max-w-[480px] sm:px-0 ${getCardAnimationClass(index)}`}
               >
                 <Card
                   className="relative isolate overflow-hidden rounded-[34px] border border-black/8 shadow-[0_18px_40px_-22px_rgba(0,0,0,0.26),0_36px_110px_-60px_rgba(0,0,0,0.42)]"
@@ -187,14 +207,14 @@ export default function ThreeDCarousel({
           {!isMobile && (
             <>
               <button
-                className="absolute left-2 top-1/2 z-40 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/85 text-muted-foreground shadow-sm transition-all hover:scale-110 hover:bg-accent hover:text-foreground"
+                className="absolute left-2 top-1/2 z-40 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/85 text-muted-foreground shadow-sm transition-all hover:scale-110 hover:bg-accent hover:text-foreground motion-reduce:hover:scale-100"
                 onClick={goToPrevious}
                 aria-label="Previous"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
-                className="absolute right-2 top-1/2 z-40 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/85 text-muted-foreground shadow-sm transition-all hover:scale-110 hover:bg-accent hover:text-foreground"
+                className="absolute right-2 top-1/2 z-40 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/85 text-muted-foreground shadow-sm transition-all hover:scale-110 hover:bg-accent hover:text-foreground motion-reduce:hover:scale-100"
                 onClick={goToNext}
                 aria-label="Next"
               >
@@ -204,6 +224,16 @@ export default function ThreeDCarousel({
           )}
 
           <div className="absolute bottom-4 left-0 right-0 z-40 flex items-center justify-center space-x-3">
+            {autoRotate && items.length > 1 && !shouldReduceMotion && (
+              <button
+                type="button"
+                onClick={() => setIsPaused((current) => !current)}
+                aria-pressed={rotationPaused}
+                className="rounded-full border border-border bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-foreground"
+              >
+                {rotationPaused ? "Play" : "Pause"}
+              </button>
+            )}
             {items.map((_, idx) => (
               <button
                 key={idx}
@@ -212,7 +242,11 @@ export default function ThreeDCarousel({
                     ? "w-6 bg-info"
                     : "w-2 bg-border hover:bg-muted-foreground/40"
                 }`}
-                onClick={() => setActive(idx)}
+                onClick={() => {
+                  setIsPaused(true);
+                  setActive(idx);
+                }}
+                aria-current={active === idx}
                 aria-label={`Go to item ${idx + 1}`}
               />
             ))}

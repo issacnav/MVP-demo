@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useReducedMotion } from "framer-motion";
 import { CrossMarker } from "@/components/LayoutParts";
 import { FadeIn } from "@/components/Motion";
 import { Signature } from "@/components/Signature";
@@ -14,6 +15,7 @@ const Lottie = dynamic(() => import("lottie-react").then((m) => m.default), {
 
 export function Footer({ showMascot = false }: { showMascot?: boolean }) {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const hiAnimation = useRef<object | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -59,17 +61,22 @@ export function Footer({ showMascot = false }: { showMascot?: boolean }) {
           </div>
 
           {showMascot && (
-            <div className="h-20 w-20 flex-shrink-0 cursor-pointer" onClick={handleClick}>
+            <button
+              type="button"
+              className="h-20 w-20 flex-shrink-0 cursor-pointer border-0 bg-transparent p-0"
+              onClick={handleClick}
+              aria-label="Replay waving mascot animation"
+            >
               {loaded && hiAnimation.current && (
                 <Lottie
                   lottieRef={lottieRef}
                   animationData={hiAnimation.current}
                   loop={false}
-                  autoplay
+                  autoplay={!shouldReduceMotion}
                   onComplete={handleComplete}
                 />
               )}
-            </div>
+            </button>
           )}
         </div>
       </footer>

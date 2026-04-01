@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { SearchIcon, LinkedInIcon } from "@/components/icons";
 import {
   Home,
@@ -37,6 +37,18 @@ export function CommandPalette() {
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
+  const closePalette = useCallback(() => {
+    setOpen(false);
+    setQuery("");
+    setSelectedIndex(0);
+  }, []);
+
+  const openPalette = useCallback(() => {
+    setSelectedIndex(0);
+    setOpen(true);
+  }, []);
 
   const allItems = [
     ...sections.map((s) => ({ ...s, type: "section" as const })),
@@ -49,47 +61,52 @@ export function CommandPalette() {
 
   const handleSelect = useCallback(
     (item: (typeof allItems)[0]) => {
-      setOpen(false);
-      setQuery("");
+      closePalette();
       if (item.type === "section") {
         const el = item.id === "top" ? document.body : document.getElementById(item.id);
         if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          el.scrollIntoView({
+            behavior: shouldReduceMotion ? "auto" : "smooth",
+            block: "start",
+          });
         }
       } else if ("action" in item) {
         (item as (typeof actions)[0]).action();
       }
     },
-    []
+    [closePalette, shouldReduceMotion]
   );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
-        setOpen((prev) => !prev);
+        if (open) {
+          closePalette();
+        } else {
+          openPalette();
+        }
       }
       if (e.key === "Escape") {
-        setOpen(false);
-        setQuery("");
+        closePalette();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [closePalette, open, openPalette]);
 
   useEffect(() => {
     if (open) {
-      setSelectedIndex(0);
       setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [open]);
 
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [query]);
-
   const handleKeyNav = (e: React.KeyboardEvent) => {
+    if (filtered.length === 0 && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+      e.preventDefault();
+      return;
+    }
+
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setSelectedIndex((i) => (i + 1) % filtered.length);
@@ -111,7 +128,7 @@ export function CommandPalette() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => { setOpen(false); setQuery(""); }}
+              onClick={closePalette}
             />
             <motion.div
               className="fixed left-1/2 top-[20%] z-[101] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 rounded-xl border border-border bg-background shadow-2xl"
@@ -127,7 +144,10 @@ export function CommandPalette() {
                   className="h-11 flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-muted-foreground"
                   placeholder="Search for a command to run..."
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setSelectedIndex(0);
+                  }}
                   onKeyDown={handleKeyNav}
                 />
                 <kbd className="rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
