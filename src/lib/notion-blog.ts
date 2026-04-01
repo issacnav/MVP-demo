@@ -9,7 +9,7 @@ import {
   type PageObjectResponse,
 } from "@notionhq/client";
 import { NotionToMarkdown } from "notion-to-md";
-import { seedBlogPost } from "@/lib/seed-blog-post";
+import { localBlogCache } from "@/lib/local-blog-cache";
 
 export const BLOG_REVALIDATE_SECONDS = 60;
 export const BLOG_CACHE_TAG = "notion-blog";
@@ -198,42 +198,55 @@ function normalizePreview(page: PageObjectResponse): BlogPostPreview | null {
   };
 }
 
-function getSeedBlogPreview(): BlogPostPreview {
+function getLocalBlogPreview(post: (typeof localBlogCache)[number]): BlogPostPreview {
   return {
-    pageId: seedBlogPost.pageId,
-    title: seedBlogPost.title,
-    slug: seedBlogPost.slug,
-    excerpt: seedBlogPost.excerpt,
-    publishedAt: seedBlogPost.publishedAt,
-    formattedDate: formatPublishedDate(seedBlogPost.publishedAt),
-    tags: [...seedBlogPost.tags],
-    coverUrl: seedBlogPost.coverUrl,
-    readTimeMinutes: getReadTimeMinutes(seedBlogPost.excerpt),
+    pageId: post.pageId,
+    title: post.title,
+    slug: post.slug,
+    excerpt: post.excerpt,
+    publishedAt: post.publishedAt,
+    formattedDate: formatPublishedDate(post.publishedAt),
+    tags: [...post.tags],
+    coverUrl: post.coverUrl,
+    readTimeMinutes: getReadTimeMinutes(post.excerpt),
   };
 }
 
-function getSeedBlogPost(): BlogPost {
+function getLocalBlogPreviews() {
+  return [...localBlogCache]
+    .sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    )
+    .map(getLocalBlogPreview);
+}
+
+function getLocalBlogPostBySlug(slug: string): BlogPost | null {
+  const post = localBlogCache.find((item) => item.slug === slug);
+
+  if (!post) {
+    return null;
+  }
+
   return {
-    ...getSeedBlogPreview(),
-    markdown: seedBlogPost.markdown,
-    readTimeMinutes: getReadTimeMinutes(seedBlogPost.markdown),
+    ...getLocalBlogPreview(post),
+    markdown: post.markdown,
+    readTimeMinutes: getReadTimeMinutes(post.markdown),
   };
 }
 
-function mergeWithSeed(posts: BlogPostPreview[]) {
-  const seedPreview = getSeedBlogPreview();
-
+function mergeWithLocalCache(posts: BlogPostPreview[]) {
   if (posts.length > 0) {
     return posts;
   }
 
-  return [seedPreview];
+  return getLocalBlogPreviews();
 }
 
 async function fetchPublishedPreviews(): Promise<BlogIndexResult> {
   if (!isConfigured()) {
     return {
-      posts: mergeWithSeed([]),
+      posts: mergeWithLocalCache([]),
       error: false,
       configured: false,
     };
@@ -243,7 +256,7 @@ async function fetchPublishedPreviews(): Promise<BlogIndexResult> {
 
   if (!notion || !notionDatabaseId) {
     return {
-      posts: mergeWithSeed([]),
+      posts: mergeWithLocalCache([]),
       error: false,
       configured: false,
     };
@@ -265,7 +278,7 @@ async function fetchPublishedPreviews(): Promise<BlogIndexResult> {
       );
 
     return {
-      posts: mergeWithSeed(posts),
+      posts: mergeWithLocalCache(posts),
       error: false,
       configured: true,
     };
@@ -277,7 +290,7 @@ async function fetchPublishedPreviews(): Promise<BlogIndexResult> {
     }
 
     return {
-      posts: mergeWithSeed([]),
+      posts: mergeWithLocalCache([]),
       error: true,
       configured: true,
     };
@@ -332,18 +345,19 @@ export const getBlogStaticParams = unstable_cache(async () => {
 export async function getBlogPostBySlug(slug: string): Promise<BlogPostResult> {
   const { posts, error, configured } = await getPublishedPreviews();
   const preview = posts.find((post) => post.slug === slug) ?? null;
+  const localFallbackPost = getLocalBlogPostBySlug(slug);
 
   if (!preview) {
     return {
-      post: null,
+      post: localFallbackPost,
       error,
-      configured,
+      configured: configured || Boolean(localFallbackPost),
     };
   }
 
-  if (preview.pageId === seedBlogPost.pageId) {
+  if (preview.pageId.startsWith("fallback:")) {
     return {
-      post: getSeedBlogPost(),
+      post: localFallbackPost,
       error: false,
       configured,
     };
@@ -369,9 +383,9 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPostResult> {
     }
 
     return {
-      post: null,
+      post: localFallbackPost,
       error: true,
-      configured,
+      configured: configured || Boolean(localFallbackPost),
     };
   }
 }
